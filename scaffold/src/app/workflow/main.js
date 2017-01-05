@@ -23,7 +23,7 @@ import { loading } from "../common/loading";
 import { setLinePathAry, linePathAry, setCurrentSelectedItem } from "../common/constant";
 import { workflowCheck } from "../common/check";
 import { initButton } from "./initButton";
-import {getSequenceDetail} from "../history/main";
+// import {getSequenceDetail} from "../history/main";
 import {initWorkflowEnv,showWorkflowEnv} from "./workflowEnv";
 import {initWorkflowVar,showWorkflowVar} from "./workflowVar";
 import {initWorkflowSetting} from "./workflowSetting";

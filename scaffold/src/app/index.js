@@ -14,41 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import {initWorkflowPage,hideWorkflowEnv} from "./workflow/main";
-import {initComponentPage} from "./component/main";
-import {initHistoryPage} from "./history/main";
-import {initSystemSettings,initSystemSettingPage} from "./setting/main";
+// import {initWorkflowPage,hideWorkflowEnv} from "./workflow/main";
+// import {initComponentPage} from "./component/main";
+// import {initHistoryPage} from "./history/main";
+// import {initSystemSettings,initSystemSettingPage} from "./setting/main";
 
 $._messengerDefaults = {
     extraClasses: 'messenger-fixed messenger-theme-future messenger-on-bottom messenger-on-right'
 }
+// initSystemSettings(initWorkflowPage);
 
-initSystemSettings(initWorkflowPage);
+// $(".menu-workflow").on('click',function(event){
+//     initWorkflowPage();
+//     $(event.currentTarget).parent().parent().children().removeClass("active");
+//     $(event.currentTarget).parent().addClass("active");
+// })
 
-$(".menu-workflow").on('click',function(event){
-    initWorkflowPage();
-    $(event.currentTarget).parent().parent().children().removeClass("active");
-    $(event.currentTarget).parent().addClass("active");
-})
+// $(".menu-component").on('click',function(event){
+//     initComponentPage();
+//     $(event.currentTarget).parent().parent().children().removeClass("active");
+//     $(event.currentTarget).parent().addClass("active");
+// })
 
-$(".menu-component").on('click',function(event){
-    initComponentPage();
-    $(event.currentTarget).parent().parent().children().removeClass("active");
-    $(event.currentTarget).parent().addClass("active");
-})
+// $(".menu-history").on('click',function(event){
+//     initHistoryPage();
+//     $(event.currentTarget).parent().parent().children().removeClass("active");
+//     $(event.currentTarget).parent().addClass("active");
+// })
 
-$(".menu-history").on('click',function(event){
-    initHistoryPage();
-    $(event.currentTarget).parent().parent().children().removeClass("active");
-    $(event.currentTarget).parent().addClass("active");
-})
-
-$(".menu-setting").on('click',function(event){
-    initSystemSettingPage();
-    $(event.currentTarget).parent().parent().children().removeClass("active");
-    $(event.currentTarget).parent().addClass("active");
-})
-// initActionLinkView();
+// $(".menu-setting").on('click',function(event){
+//     initSystemSettingPage();
+//     $(event.currentTarget).parent().parent().children().removeClass("active");
+//     $(event.currentTarget).parent().addClass("active");
+// })
 
 // sidebar nav control
 $(".nav-control").on("click",function(event){
@@ -64,7 +62,7 @@ $(".nav-control").on("click",function(event){
     }
 })
 
-$(".workflow-close-env").on('click', function() {
-    hideWorkflowEnv();
-});
+// $(".workflow-close-env").on('click', function() {
+//     hideWorkflowEnv();
+// });
 

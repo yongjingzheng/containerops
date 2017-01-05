@@ -16,11 +16,16 @@ var replace = require('gulp-replace');
 var browserSync = require('browser-sync').create();
 var minimist = require('minimist');
 var fs = require("fs");
+var glob = require('glob');
+
 
 
 var args = minimist(process.argv.slice(2), {
-    boolean: ["dist"]
+    string: ["dist","modules"]
 });
+var modules = args.modules;
+// console.log(args);
+console.log(modules);
 
 gulp.task('dev:clean', function() {
     return del(['./dev']);
@@ -51,6 +56,15 @@ gulp.task('dev:babel', function() {
         .on('error', gutil.log);
 })
 
+// gulp.task('dev:babel', function() {
+//     return gulp.src(['src/vendor/**/*.js','src/app/{'+ modules+'}/*.js','src/app/setting/*.js'], { base: "./src" })
+//         .pipe(babel({
+//             presets: ['es2015']
+//         }))
+//         // .pipe(uglify())
+//         .pipe(gulp.dest('dev/src'))
+//         .on('error', gutil.log);
+// })
 /**
  *  This will copy templates to dev dist folder
  */
@@ -90,16 +104,27 @@ gulp.task('dev:json', function() {
 /**
  *  This will browserify scripts
  */
+// gulp.task("dev:browserify", ['dev:babel'], function() {
+//     var b = browserify({
+//         entries: ["dev/src/app/workflow/index.js","dev/src/app/component/index.js", "dev/src/app/history/index.js","dev/src/app/setting/index.js", "dev/src/app/theme/settings.js", "dev/src/app/theme/app.js","dev/src/app/history/paginate.js" ]
+//     });
+//     return b.bundle()
+//         .pipe(source("main.js"))
+//         .pipe(gulp.dest("dev/src"))
+//         .on('error', gutil.log);
+// });
 gulp.task("dev:browserify", ['dev:babel'], function() {
+    // var moduleEntries = glob.sync('dev/src/app/{'+modules+'}/index.js');
+    var moduleEntries = glob.sync('dev/src/app/component/index.js');
+    console.log(moduleEntries);
     var b = browserify({
-        entries: ["dev/src/app/index.js", "dev/src/app/theme/settings.js", "dev/src/app/theme/app.js","dev/src/app/history/paginate.js" ]
+        entries: moduleEntries.concat(['dev/src/app/setting/index.js',"dev/src/app/theme/settings.js", "dev/src/app/theme/app.js","dev/src/app/history/paginate.js" ])
     });
     return b.bundle()
         .pipe(source("main.js"))
         .pipe(gulp.dest("dev/src"))
         .on('error', gutil.log);
 });
-
 /**
  *  This will concat all scripts include configed in scripts.json to one file: main.js
  */
@@ -168,7 +193,7 @@ gulp.task('dev:browser-sync', ['dev:html', 'dev:images', 'dev:fonts', 'dev:css-r
 gulp.task('dev:copy', ['dev:html', 'dev:images', 'dev:fonts', 'dev:css-replace', 'dev:script-replace'], function() {
     if (args.dist) {
         return gulp.src('dev/**')
-            .pipe(gulp.dest(args._[0]))
+            .pipe(gulp.dest(args.dist))
             .on('error', gutil.log);
     }
 });

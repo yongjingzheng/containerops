@@ -33,7 +33,7 @@ export function initSystemSettings(next){
     });
     promise.fail(function(xhr, status, error) {
         loading.hide();
-        if (!_.isUndefined(xhr.respaonseJSON) && xhr.responseJSON.errMsg) {
+        if (!_.isUndefined(xhr.responseJSON) && xhr.responseJSON.errMsg) {
             notify(xhr.responseJSON.errMsg, "error");
         } else if(xhr.statusText != "abort") {
             notify("Server is unreachable", "error");
