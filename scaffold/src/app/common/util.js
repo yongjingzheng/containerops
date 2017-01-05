@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as constant from "./constant";
 import * as config from "./config";
+import { workflowData } from "../workflow/main";
 
 export function isObject(o) {
     return Object.prototype.toString.call(o) == '[object Object]';
@@ -51,17 +52,7 @@ export function findOutputLines(itemId) {
     });
     return relatedLines;
 }
-export function hasLinkWithStartStage(itemId){
-    var inputLines = findInputLines(itemId);
-    var obj = _.find(inputLines, function(line){
-          return line.startData.id == "start-stage";
-    })
-    if(_.isEmpty(obj)){
-        return {"hasLink":false, "startData":""};
-    }else{
-        return {"hasLink":true, "startData":obj.startData};
-    }
-}
+
 export function removeRelatedLines(args) {
     if (isString(args)) {
         var relatedLines = findAllRelatedLines(args);
@@ -72,6 +63,30 @@ export function removeRelatedLines(args) {
         })
     }
 
+}
+export function getStartStageData(){
+     var startStage = _.find(workflowData, function(item){
+        return item.id == "start-stage";
+     });
+     return startStage;
+}
+export function hasLinkWithStartStage(itemId){
+    var inputLines = findInputLines(itemId);
+    var obj = _.find(inputLines, function(line){
+          return line.startData.id == "start-stage";
+    })
+    if(_.isEmpty(obj)){
+        return {"hasLink":false, "startData":""};
+    }else{
+        return {"hasLink":true, "startData":getStartStageData()};
+    }
+}
+export function findStartStageOutputKeys(){
+    var startStage = getStartStageData();
+    var keys = _.map(startStage.outputJson, function(item){
+        return item.event + "_" + item.type;
+    })
+    return keys || [];
 }
 export function findAllActionsOfStage(stageId) {
     var groupId = "#action" + "-" + stageId;

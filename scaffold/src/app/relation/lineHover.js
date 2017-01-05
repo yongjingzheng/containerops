@@ -57,3 +57,71 @@ export function makeBackLayer(element) {
         element.parentNode.insertBefore(element, firstChild);
     }
 }
+
+export function showOutputLines(param, i) {
+    $.ajax({
+        url: "../../templates/relation/showOutputLine.html",
+        type: "GET",
+        cache: false,
+        success: function(data) {
+            var outputLines = util.findOutputLines(param.id);
+            var template = _.template(data)({ "lines": outputLines });
+            $("#div-d3-lines-table").empty();
+            $("#div-d3-lines-table").html($(template));
+            $("#div-d3-lines-table").css("top",$("#div-d3-main-svg > svg").offset().top+ 2 * constant.buttonVerticalSpace + constant.buttonHeight + 15);
+            $(".output-line-tr").css('cursor', 'pointer');
+            $(".output-line-tr").on("mouseover", function() {
+                    // $(this).css("background-color", '#48a746');
+                    // $(this).css("color", 'white');
+                    highlightSelectedLine($(this).data("lineid"), true);
+                })
+                .on("mouseout", function() {
+                    // $(this).css("background-color", 'white');
+                    // $(this).css("color", '#555');
+                    highlightSelectedLine($(this).data("lineid"), false);
+                })
+                .on("click", function() {
+                    // $(this).css("color", '#555');
+                    // $(this).css("background-color", '#81D9EC');
+                    $(".output-line-tr.active").removeClass("active");
+                    $(this).addClass("active");
+                    clickWorkflowLine(d3.select("#" + $(this).data("lineid"))[0][0])
+                })
+            $("#remove-output-line-div").on("click", function(){
+                $("#div-d3-lines-table").empty();
+            })
+        }
+    });
+}
+export function clickWorkflowLine(element) {
+    element.parentNode.appendChild(element); // make this line to front layer
+    var self = $(element);
+    util.changeCurrentElement(constant.currentSelectedItem);
+    constant.setCurrentSelectedItem({ "data": self, "type": "line" });
+    initButton.updateButtonGroup("line");
+    d3.select(element).attr("stroke", "#81D9EC");
+    $.ajax({
+        url: "../../templates/relation/editLine.html",
+        type: "GET",
+        cache: false,
+        success: function(data) {
+            editLine(data, self);
+        }
+    });
+}
+
+function highlightSelectedLine(lineId, highlight) {
+    if (highlight) {
+        makeFrontLayer(d3.select("#" + lineId)[0][0]);
+        d3.select("#" + lineId).attr("stroke", "#5dc4bf");
+    } else {
+        
+        if (constant.currentSelectedItem != null && constant.currentSelectedItem.type == "line" && constant.currentSelectedItem.data.attr("id") == lineId) {
+            makeFrontLayer(d3.select("#" + lineId)[0][0]);
+            d3.select("#" + lineId).attr("stroke", "#81D9EC");
+        } else {
+            makeBackLayer(d3.select("#" + lineId)[0][0]);
+            d3.select("#" + lineId).attr("stroke", "#E6F3E9");
+        }
+    }
+}

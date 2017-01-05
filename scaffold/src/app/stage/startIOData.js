@@ -15,17 +15,35 @@ limitations under the License.
  */
 
 export let data;
+export let outputData;
+export let transformationPluginData;
 
 let selectedTab;
-
 export function getStartIOData(start){
-    if(start.outputJson == undefined){
-        start.outputJson = [];
-        start.outputJson.push($.extend(true,{},metadata));
+    // console.log("before")
+    // console.log(start)
+    // delete start.inputputJson;
+    // delete start.plugins;
+    // console.log("after")
+    // console.log(start)
+    if(start.inputJson == undefined){
+        start.inputJson = [];
+        start.inputJson.push($.extend(true,{},metadata));
     }
-
-    data = start.outputJson;
+    if(start.outputJson == undefined){
+        start.outputJson = {};
+    }
+    if(start.plugins == undefined){
+        start.plugins = {};
+        start.plugins = $.extend(true, {}, transformationPluginMetaData);
+    }else if(start.plugins["transformation"] == undefined){
+        start.plugins["transformation"] = {"data":{}};
+    }
+    data = start.inputJson;
+    outputData = start.outputJson;
+    transformationPluginData = start.plugins["transformation"].data;
 }
+
 
 // selectedTab
 export function setSelectedTab(index){
@@ -34,22 +52,28 @@ export function setSelectedTab(index){
 
 // type select
 export function findTypeSelectDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".output-type-select");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".input-type-select");
 }
 
 export function setTypeSelect(){
-    data[selectedTab].type = findTypeSelectDom().val();
+    if(data[selectedTab] && findTypeSelectDom()){
+        data[selectedTab].type = findTypeSelectDom().val();
+    }
+   
 }
 
 export function setTypeSelectDom(){
-    findTypeSelectDom().val(data[selectedTab].type);
-    findTypeSelectDom().select2({
-        minimumResultsForSearch: Infinity
-    });
+    if(data[selectedTab]){
+         findTypeSelectDom().val(data[selectedTab].type);
+         findTypeSelectDom().select2({
+            minimumResultsForSearch: Infinity
+         });
+    }
+   
 }
 
 export function getTypeSelect(){
-    return data[selectedTab].type;
+    return data[selectedTab] ? data[selectedTab].type : "";
 }
 
 // event select
@@ -58,106 +82,154 @@ export function setEvent(e){
 }
 
 export function findGitHubEventSelectDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".github-event-select");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".github-event-select");
 }
 
 export function findGitLabEventSelectDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".gitlab-event-select");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".gitlab-event-select");
 }
 
 export function findEventInputDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".output-event-input");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".input-event-input");
 }
 
 export function setEventSelect(type){
     if(type == "github"){
-        data[selectedTab].event = findGitHubEventSelectDom().val();
+        if(data[selectedTab]){
+            data[selectedTab].event = findGitHubEventSelectDom().val();
+        }
+       
     }else if(type == "gitlab"){
-        data[selectedTab].event = findGitLabEventSelectDom().val();
+        if(data[selectedTab]){
+            data[selectedTab].event = findGitLabEventSelectDom().val();
+        }
+        
     }  
 }
 
 export function setEventInput(){
-    data[selectedTab].event = findEventInputDom().val();
+    if(data[selectedTab] && findEventInputDom()){
+        data[selectedTab].event = findEventInputDom().val();
+    }
+    
 }
 
 export function setEventSelectDom(type){
     if(type == "github"){
-        findGitHubEventSelectDom().val(data[selectedTab].event);
-        findGitHubEventSelectDom().select2({
-            minimumResultsForSearch: Infinity
-        });
+        if(data[selectedTab]){
+            findGitHubEventSelectDom().val(data[selectedTab].event);
+            findGitHubEventSelectDom().select2({
+              minimumResultsForSearch: Infinity
+            });
+        }
+        
     }else if(type == "gitlab"){
-        findGitLabEventSelectDom().val(data[selectedTab].event);
-        findGitLabEventSelectDom().select2({
-            minimumResultsForSearch: Infinity
-        });
+        if(data[selectedTab]){
+            findGitLabEventSelectDom().val(data[selectedTab].event);
+            findGitLabEventSelectDom().select2({
+                minimumResultsForSearch: Infinity
+            });
+        }
+        
     }
 }
 
 export function setEventInputDom(){
-    findEventInputDom().val(data[selectedTab].event);
-}
+    if(data[selectedTab]){
+        findEventInputDom().val(data[selectedTab].event);
+    }
+} 
 
 export function getEventSelect(){
-    return data[selectedTab].event;
+    return data[selectedTab] ? data[selectedTab].event : "";
 }
 
 export function findEventSelectDivDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".event-select-div");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".event-select-div");
 }
 
 export function findEventInputDivDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").find(".event-input-div");
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").find(".event-input-div");
 }
 
 // viewer
-export function findOutputTreeViewerDom(){
-    return $(".output-json-div[data-index="+ selectedTab +"]").find(".startOutputTreeViewer");
+export function findInputTreeViewerDom(){
+    return $(".input-json-div[data-index="+ selectedTab +"]").find(".startInputTreeViewer");
 }
 
 // designer
-export function findOutputTreeDesignerDom(){
-    return $(".output-json-div[data-index="+ selectedTab +"]").find(".startOutputTreeDesigner");
+export function findInputTreeDesignerDom(){
+    return $(".input-json-div[data-index="+ selectedTab +"]").find(".startInputTreeDesigner");
 }
 
-export function findOutputTreeStartDom(){
-  return $(".output-json-div[data-index="+ selectedTab +"]").find(".outputTreeStart");
+export function findInputTreeStartDom(){
+  return $(".input-json-div[data-index="+ selectedTab +"]").find(".inputTreeStart");
 }
 
-export function findOutputTreeDivDom(){
-  return $(".output-json-div[data-index="+ selectedTab +"]").find(".outputTreeDiv");
+export function findInputTreeDivDom(){
+  return $(".input-json-div[data-index="+ selectedTab +"]").find(".inputTreeDiv");
 }
 
-export function findOutputCodeEditorDom(){
-  return $(".output-json-div[data-index="+ selectedTab +"]").find(".outputCodeEditor");
+export function findInputCodeEditorDom(){
+  return $(".input-json-div[data-index="+ selectedTab +"]").find(".inputCodeEditor");
 }
 
-export function findOutputTreeEditorDom(){
-  return $(".output-json-div[data-index="+ selectedTab +"]").find(".outputTreeEditor");
+export function findInputTreeEditorDom(){
+  return $(".input-json-div[data-index="+ selectedTab +"]").find(".inputTreeEditor");
 }
 
 // json
-export function setJson(d){
-    data[selectedTab].json = d;
+export function setJson(d, type){
+    if(type){
+        // outputData.json = d;
+        outputData = d;
+    }else {
+        data[selectedTab].json = d;
+    }
+   
 }
 
-export function getJson(){
-    return data[selectedTab].json;
+export function getJson(type){
+    // for test
+    // return type == "output" ? outputData[selectedTab].json : data[selectedTab].json;
+    return type == "output" ? outputData : (data[selectedTab]?data[selectedTab].json:{});
+    // return data[selectedTab].json;
+}
+export function getInputTypeAndEventPairs(){
+    var inputTypes = _.map(data, function(item){
+        return item.type + "_" + item.event;
+    });
+    return inputTypes || [];
+}
+export function getInputJsonByType(type){
+    var inputData = _.find(data, function(item){
+        return (item.type + "_" + item.event) == type;
+    })
+    return inputData || {};
 }
 
-// new output
-export function addOutput(){
-    data.push($.extend(true,{},metadata));
+// // new input
+// export function addInput(){
+//     data.push($.extend(true,{},metadata));
+// }
+// // delete Input
+// export function deleteInput(){
+//     data.splice(selectedTab,1);
+// }
+export function optInput(opt){
+    if(opt==='add'){
+        data.push($.extend(true,{},metadata));
+    }else if(opt === 'delete'){
+        data.splice(selectedTab,1);
+    }
 }
-
 // tab
-export function findSelectedStartOutputTabDom(){
-    return $(".start-output-tab[data-index="+ selectedTab +"]");
+export function findSelectedStartInputTabDom(){
+    return $(".start-input-tab[data-index="+ selectedTab +"]");
 }
 
-export function findSelectedStartOutputTabContentDom(){
-    return $(".output-type-event-div[data-index="+ selectedTab +"]").parent();
+export function findSelectedStartInputTabContentDom(){
+    return $(".input-type-event-div[data-index="+ selectedTab +"]").parent();
 }
 
 // check event options
@@ -173,14 +245,18 @@ export function isEventOptionAvailable(){
     return false;
 }
 
-export function deleteOutput(){
-    data.splice(selectedTab,1);
-}
+
 
 var metadata = {
   "type" : "github",
   "event" : "PullRequest",
   "json" : {}
+}
+var transformationPluginMetaData = {
+    "transformation":{
+        "data":{}
+    }
+    
 }
 
 

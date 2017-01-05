@@ -1,0 +1,52 @@
+<style>
+.output-line-tr.list-group-item:hover{
+    background-color: #5dc4bf;
+    color:white;
+}
+.output-line-tr.list-group-item.active{
+   background-color: #81D9EC;
+   color:#333;
+   border-color:#81D9EC;
+}
+</style>
+<div class="widget" style="height: 420px;width:320px;" >
+    <header>
+        <div class="widget-controls">
+            <a href="#"><i class="fa fa-refresh" ></i></a>
+            <a href="#" id="remove-output-line-div"><i class="glyphicon glyphicon-remove" ></i></a>
+        </div>
+    </header>
+
+    <div class="widget-body no-padding" style="height: 390px;overflow-x:hidden;overflow-y: auto;">
+        <div class="list-group list-group-lg output-line-table" >
+            <a class="list-group-item disabled" >
+                    <span style="width:10%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                #
+                                </span>
+                    <span style="width:40%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                Start Node
+                                </span>
+                    <span style="width:40%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                End Node
+                                </span>
+                </a>
+            <% _.each(lines, function(line, index){ %>
+                <a class="list-group-item output-line-tr" href="#" data-lineid="<%= line.id %>">
+                    <span style="width:10%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                    <%= index %>
+                                </span>
+                    <span style="width:40%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                     <% if(line.startData.type == 'workflow-start'){ %>
+                            <%= 'Start Stage' %>
+                                <% } else{ %>
+                                    <%= line.startData.setupData.action ? line.startData.setupData.action.name : ""  %>
+                                        <% } %>
+                                </span>
+                    <span style="width:40%;text-overflow:ellipsis; overflow:hidden;display: inline-block;">
+                                  <%= line.endData.setupData.action ? line.endData.setupData.action.name : ""  %>  
+                                </span>
+                </a>
+                <% }) %>
+        </div>
+    </div>
+</div>

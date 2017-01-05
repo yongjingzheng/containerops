@@ -6,13 +6,16 @@ var babel = require('gulp-babel');
 var del = require('del');
 var uglify = require('gulp-uglify');
 // const rename = require('gulp-rename');
+
 var concat = require('gulp-concat');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var sass = require('gulp-sass');
 var imagemin = require('gulp-imagemin');
 var gutil = require('gulp-util');
 var replace = require('gulp-replace');
+var sourcemaps = require('gulp-sourcemaps');
 var browserSync = require('browser-sync').create();
 var minimist = require('minimist');
 var fs = require("fs");
@@ -43,10 +46,12 @@ gulp.task('dev:styles', function() {
  */
 gulp.task('dev:babel', function() {
     return gulp.src('src/{app,vendor}/**/*.js', { base: "./src" })
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(babel({
             presets: ['es2015']
         }))
         // .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dev/src'))
         .on('error', gutil.log);
 })
@@ -96,6 +101,9 @@ gulp.task("dev:browserify", ['dev:babel'], function() {
     });
     return b.bundle()
         .pipe(source("main.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("dev/src"))
         .on('error', gutil.log);
 });
@@ -107,7 +115,9 @@ gulp.task('dev:scripts', ['dev:babel', 'dev:browserify'], function(done) {
     let config = JSON.parse(fs.readFileSync("src/scripts.json", 'utf8'));
     let src = config.scripts.concat(['dev/src/main.js']);
     return gulp.src(src)
+        // .pipe(sourcemaps.init())
         .pipe(concat('main.js'))
+        // .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dev/src'))
         .on('error', gutil.log);
 });
@@ -146,7 +156,7 @@ gulp.task('dev:reload-html', ['dev:css-replace', 'dev:script-replace'], function
  */
 gulp.task("dev:watch", function() {
     gulp.watch("./src/**/*.{scss,css}", ['dev:styles']);
-    gulp.watch(["src/{app,vendor}/**/*.js", "src/scripts.json"], ['dev:reload-js']);
+    gulp.watch(["src/{app,vendor}/**/*.js", "src/scripts.json","src/host.json"], ['dev:reload-js']);
     gulp.watch("src/**/*.html", ['dev:reload-html']);
     gulp.watch("src/assets/fonts/*", ['dev:fonts', 'dev:styles']);
     gulp.watch("src/assets/images/*", ['dev:images', 'dev:styles']);

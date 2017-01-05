@@ -25,7 +25,7 @@
                             <div class="row col-md-6">
                                 <label class="col-md-4 control-label" for="pp-url">Workflow URL</label>
                                 <div class="col-md-7">
-                                    <input id="pp-url"  class="form-control" readonly>
+                                    <input id="pp-url" class="form-control" readonly>
                                 </div>
                                 <i class="fa fa-copy" id="copyUrl" title="copy url" data-clipboard-action="copy" data-clipboard-target="#pp-url"></i>
                             </div>
@@ -37,7 +37,7 @@
                                 <i class="fa fa-copy" id="copyToken" title="copy token" data-clipboard-action="copy" data-clipboard-target="#pp-token"></i>
                             </div>
                         </div>
-                        <div class="col-md-12 import-div" style="margin-top:20px">
+                        <!--  <div class="col-md-12 import-div" style="margin-top:20px">
                             <div class="panel">
                                 <div class="panel-heading clearfix">
                                     <i class="glyphicon glyphicon-cloud-download outputicon"></i>
@@ -61,9 +61,177 @@
                                     </div>
                                 </div>
                             </div>
+                        </div> -->
+                        <div class="col-lg-12" style="margin-top:20px">
+                            <div class="clearfix">
+                                <ul class="nav nav-tabs pull-xs-left" id="start-stage-tab" role="tablist" style="background-color:#f7f7f7">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="inputData-tab" data-toggle="tab" href="#inputData" role="tab" aria-controls="inputData" aria-expanded="false">
+                                            <span>Input</span>
+                                            <i class="arrow arrow-left"></i>
+                                            <i class="arrow arrow-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="outputData-tab" data-toggle="tab" href="#outputData" role="tab" aria-controls="outputData" aria-expanded="false">
+                                            <span>Output</span>
+                                            <i class="arrow arrow-left"></i>
+                                            <i class="arrow arrow-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="transform-tab" data-toggle="tab" href="#transform" role="tab" aria-controls="transform" aria-expanded="true">
+                                            <span>IO Transformation</span>
+                                            <i class="arrow arrow-left"></i>
+                                            <i class="arrow arrow-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content mb-lg" id="startStageTabsContent">
+                                <div class="tab-pane clearfix active" id="inputData" role="tabpanel" aria-labelledby="inputData-tab" aria-expanded="false" style="padding: 25px;">
+                                    <div style="margin-bottom: 20px">
+                                        <button type="button" class="btn btn-success btn-sm" id="newStartInput">
+                                            <i class="fa fa-plus"></i>
+                                            <span>New Input</span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" id="deleteStartInput">
+                                            <i class="fa fa-trash-o"></i>
+                                            <span>Delete Selected</span>
+                                        </button>
+                                    </div>
+                                    <div class="tabbable tabs-left mb-lg" style="border:1px solid #ccc; border-radius: 5px;">
+                                        <ul id="startInputTabs" class="nav nav-tabs">
+                                        </ul>
+                                        <div id="startInputTabsContent" class="tab-content" style="border-left:1px solid #ccc;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="outputData" role="tabpanel" aria-labelledby="outputData-tab" aria-expanded="false" style="padding: 25px;">
+                                    <div class="row">
+                                        <div class="col-md-6 import-div">
+                                            <div class="panel">
+                                                <div class="panel-heading clearfix">
+                                                    <i class="glyphicon glyphicon-cloud-download outputicon"></i>
+                                                    <span class="panel-title">Output Tree Edit</span>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="tree-add-button" id="outputTreeStart">
+                                                        <div class="btn-div" id="outputStartBtn">
+                                                            <span class="glyphicon glyphicon-plus nohover"></span>
+                                                            <div class="desc">
+                                                                <label class="desc-label">Add New Value</label>
+                                                                <div class="desc-btn">
+                                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="json-editor" id="outputTreeDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 import-div">
+                                            <div class="panel">
+                                                <div class="panel-heading clearfix">
+                                                    <i class="glyphicon glyphicon-cloud-download outputicon"></i>
+                                                    <span class="panel-title">Output From Edit</span>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="codeEditor" id="outputCodeEditor"></div>
+                                                    <div class="col-md-4 col-md-offset-4 row editor-transfer">
+                                                        <span class="col-md-4 code-to-tree" id="outputFromJson"></span>
+                                                        <span class="col-md-4 tree-to-code" id="outputToJson"></span>
+                                                    </div>
+                                                    <div class="treeEditor" id="outputTreeEditor"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="transform" role="tabpanel" aria-labelledby="transform-tab" aria-expanded="false" style="padding: 25px;">
+                                    <!--  <svg id="bipatiteLineSvg" class="relation-svg"></svg>
+                                   <div class="col-md-6">
+                                            <div class="panel">
+                                                <div class="panel-heading clearfix">
+                                                    <i class="glyphicon glyphicon-cloud-upload inputicon"></i>
+                                                    <span class="panel-title">Input</span>
+                                                        <div class="component-type-select-div">
+                                                        <label class="select-label">
+                                                           Select Input Type:
+                                                        </label>
+                                                        <div class="select-div">
+                                                            <select id="input-type-select" style="width:100%;">
+                                                             </select>
+                                                        </div>
+                                                        </div>
+
+                                                </div>
+                                                <div class="panel-body">
+                                                      <div id="importDiv" class="json-editor">
+                                                </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-6 import-div">
+                                            <div class="panel">
+                                                <div class="panel-heading clearfix">
+                                                    <i class="glyphicon glyphicon-cloud-download outputicon"></i>
+                                                    <span class="panel-title">Output</span>
+                                                </div>
+                                                <div class="panel-body">
+                                                      <div id="outputDiv" class="json-editor">
+                                                </div>
+                                                </div>
+                                            </div>
+                                    </div> -->
+                                    <div class="tree-container" style="margin-top: 0;">
+                                        <div class="tree-bg-left">
+                                            <div style="background-color:#ebebeb;border-bottom: 1px solid #e0e0e0">
+                                                <span class="title">
+                                                    <i class="glyphicon glyphicon-cloud-upload inputicon"></i>
+                                                    Input
+                                                </span>
+                                                <div class="pull-right" style="margin:5px;">
+                                                    <label class="control-label" style="font-size:13px;font-weight: normal;margin-right: 5px;">Select Input Type</label>
+                                                    <select id="input-type-event-select" style="width:260px;margin-right:5px;">
+                                                    </select>
+                                                    <button type="button" class="btn btn-success btn-xs" title="Reset Relation" id="resetRelation">
+                                                        <i class="fa fa-rotate-left"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-xs hide" title="Remove Relation" id="removeLine">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-bg-right">
+                                            <div style="background-color:#ebebeb;border-bottom: 1px solid #e0e0e0">
+                                                <span class="title">
+                                                    <i class="glyphicon glyphicon-cloud-download outputicon"></i>
+                                                    Output
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row treeview" onselectstart="return false;" style="width:60%;">
+                                            <svg id="bipatiteLineSvg" class="relation-svg"></svg>
+                                            <div class="col-md-3">
+                                                <div id="importDiv" class="json-editor">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div id="outputDiv" class="json-editor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
-                </form>   
+                </form>
             </div>
         </section>
     </div>
