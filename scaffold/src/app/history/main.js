@@ -24,21 +24,22 @@ import { getHistoryList } from "./historyList";
 // import * as initButton from "../workflow/initButton";
 import {changeCurrentElement} from "../common/util";
 import * as sequenceUtil from "./initUtil";
+import historyListTemplate from "../../templates/history/historyList.html";
 
 export function initHistoryPage() {
     getHistory();
 }
 
 function getHistory() {
-    $.ajax({
-        url: "../../templates/history/historyList.html",
-        type: "GET",
-        cache: false,
-        success: function(data) {
-            $("#main").html($(data));
+    // $.ajax({
+    //     url: "../../templates/history/historyList.html",
+    //     type: "GET",
+    //     cache: false,
+    //     success: function(data) {
+            $("#main").html($(historyListTemplate));
             getHistoryList();
-        }
-    });
+    //     }
+    // });
 }
 
 function forVdSequenceList(vd,index,length,pdId,pdName,vdId,vdName){

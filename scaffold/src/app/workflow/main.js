@@ -23,11 +23,11 @@ import { loading } from "../common/loading";
 import { setLinePathAry, linePathAry, setCurrentSelectedItem } from "../common/constant";
 import { workflowCheck } from "../common/check";
 import { initButton } from "./initButton";
-// import {getSequenceDetail} from "../history/main";
+import { getSequenceDetail } from "../history/main";
 import {initWorkflowEnv,showWorkflowEnv} from "./workflowEnv";
 import {initWorkflowVar,showWorkflowVar} from "./workflowVar";
 import {initWorkflowSetting} from "./workflowSetting";
-
+import workflowListTemplate from "../../templates/workflow/workflowList.html";
 
 export let allWorkflows;
 
@@ -59,12 +59,12 @@ export function initWorkflowPage() {
 }
 
 function showWorkflowList() {
-    $.ajax({
-        url: "../../templates/workflow/workflowList.html",
-        type: "GET",
-        cache: false,
-        success: function(data) {
-            $("#main").html($(data));
+    // $.ajax({
+    //     url: "../../templates/workflow/workflowList.html",
+    //     type: "GET",
+    //     cache: false,
+    //     success: function(data) {
+            $("#main").html($(workflowListTemplate));
             $("#workflowlist").show("slow");
 
             $(".newworkflow").on('click', function() {
@@ -137,8 +137,8 @@ function showWorkflowList() {
                 workflowHasHistory = target.parent().data("hashistory");
                 getWorkflowData();
             });
-        }
-    });
+    //     }
+    // });
 }
 
 function getWorkflowData() {

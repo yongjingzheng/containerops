@@ -20,6 +20,7 @@ import {initComponentSetup} from "./componentSetup";
 import {initComponentEnv} from "./componentEnv";
 import {notify,confirm} from "../common/notify";
 import {loading} from "../common/loading";
+import componetListTemplate from '../../templates/component/componentList.html';
 
 export let allComponents;
 
@@ -28,6 +29,7 @@ let componentDataOriginalCopy;
 let componentName, componentVersion,componentVersionID;
 
 export function initComponentPage(){
+    // console.log("test"+test);
     var promise = getAllComponents();
     promise.done(function(data){
         loading.hide();
@@ -49,12 +51,12 @@ export function initComponentPage(){
 }
 
 function showComponentList(){
-    $.ajax({
-        url: "../../templates/component/componentList.html",
-        type: "GET",
-        cache: false,
-        success: function (data) {
-            $("#main").html($(data));    
+    // $.ajax({
+    //     url: "../../templates/component/componentList.html",
+    //     type: "GET",
+    //     cache: false,
+        // success: function (data) {
+            $("#main").html($(componetListTemplate));    
             $("#componentlist").show("slow");
 
             $(".newcomponent").on('click',function(){
@@ -112,8 +114,8 @@ function showComponentList(){
                 componentVersionID = target.parent().parent().data("versionid");
                 getComponentData();
             })
-        }
-    });
+        // }
+    // });
 }
 
 function getComponentData(){

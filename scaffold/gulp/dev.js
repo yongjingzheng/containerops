@@ -17,13 +17,13 @@ var browserSync = require('browser-sync').create();
 var minimist = require('minimist');
 var fs = require("fs");
 var glob = require('glob');
-
+var html = require('html-browserify');
 
 
 var args = minimist(process.argv.slice(2), {
-    string: ["dist","modules"]
+    string: ["dist","m"]
 });
-var modules = args.modules;
+var modules = args.m;
 // console.log(args);
 console.log(modules);
 
@@ -114,11 +114,19 @@ gulp.task('dev:json', function() {
 //         .on('error', gutil.log);
 // });
 gulp.task("dev:browserify", ['dev:babel'], function() {
-    // var moduleEntries = glob.sync('dev/src/app/{'+modules+'}/index.js');
-    var moduleEntries = glob.sync('dev/src/app/component/index.js');
+    var exp = "";
+    if(modules){
+        exp = modules.split(",").length ==1? modules : '{'+modules+'}';
+    }else{
+        exp = "*";
+    }
+    
+    var moduleEntries = glob.sync('dev/src/app/'+exp+'/index.js');
     console.log(moduleEntries);
     var b = browserify({
-        entries: moduleEntries.concat(['dev/src/app/setting/index.js',"dev/src/app/theme/settings.js", "dev/src/app/theme/app.js","dev/src/app/history/paginate.js" ])
+        entries: moduleEntries.concat(['dev/src/app/core/index.js',"dev/src/app/history/paginate.js" ]),
+        insertGlobals: true,
+        transform: html
     });
     return b.bundle()
         .pipe(source("main.js"))
