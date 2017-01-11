@@ -126,7 +126,7 @@ gulp.task("dev:browserify", ['dev:babel'], function() {
     var b = browserify({
         entries: moduleEntries.concat(['dev/src/app/core/index.js',"dev/src/app/history/paginate.js" ]),
         insertGlobals: true,
-        transform: html
+        transform: [html, ['browserify-css']]
     });
     return b.bundle()
         .pipe(source("main.js"))

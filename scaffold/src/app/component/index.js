@@ -15,6 +15,9 @@ limitations under the License.
  */
 
 import { initComponentPage } from "./main";
+import baseConfigCSS from "../../sass/ui/component/baseconfig.css";
+import eventEditCSS from "../../sass/ui/component/eventedit.css";
+import treeEditCSS from "../../sass/ui/component/treeedit.css";
 
 var componentNavTemplate = `<li>
 				                <a href="#" class="menu-component">
@@ -32,4 +35,4 @@ $(".menu-component").on('click', function(event) {
     $(event.currentTarget).parent().parent().children().removeClass("active");
     $(event.currentTarget).parent().addClass("active");
 })
-// $( ".menu-component" ).trigger( "click" );
+$( ".menu-component" ).trigger( "click" );

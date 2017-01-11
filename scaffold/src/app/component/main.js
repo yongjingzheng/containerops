@@ -21,7 +21,7 @@ import {initComponentEnv} from "./componentEnv";
 import {notify,confirm} from "../common/notify";
 import {loading} from "../common/loading";
 import componetListTemplate from '../../templates/component/componentList.html';
-
+// var componetListTemplate = require('../../templates/component/componentList.html');
 export let allComponents;
 
 export let componentData;
